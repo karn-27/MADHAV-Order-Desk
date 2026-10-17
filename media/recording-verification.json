@@ -1,0 +1,123 @@
+{
+  "sample_mode": true,
+  "verified_steps": 19,
+  "duration": 221.88,
+  "narration": "en-US-AriaNeural",
+  "timing_drift": 0.9377592079999886,
+  "actions": [
+    {
+      "step": "intro",
+      "start": 3.292,
+      "duration": 11.664,
+      "spoken": "Hi. Welcome to MADHAV Order Desk, a working prototype for small businesses taking orders through chat. Let me show you how the owner stays in control."
+    },
+    {
+      "step": "aanya",
+      "start": 16.137,
+      "duration": 9.768,
+      "spoken": "Here's Aanya. She asks for one chocolate cake tomorrow, in Hinglish, and wants to know the price. Nothing is booked yet."
+    },
+    {
+      "step": "aanya_parse",
+      "start": 27.106,
+      "duration": 13.536,
+      "spoken": "I click Prepare reply. This recording uses Sample mode, so this step is not a live AI request. The demo correctly identifies the product, quantity, and pickup date."
+    },
+    {
+      "step": "aanya_price",
+      "start": 41.802,
+      "duration": 12.408,
+      "spoken": "The price comes from the bakery catalog. Nine hundred rupees total, and four hundred and fifty in suggested advance. I can still review the details before accepting."
+    },
+    {
+      "step": "aanya_reserve",
+      "start": 55.398,
+      "duration": 8.376,
+      "spoken": "Only when I approve and reserve does that order enter the system. The confirmation draft updates after reservation."
+    },
+    {
+      "step": "aanya_reply",
+      "start": 64.967,
+      "duration": 9.384,
+      "spoken": "I approve the reply separately. The message now appears in the simulated chat. No real WhatsApp message was sent."
+    },
+    {
+      "step": "aanya_orders",
+      "start": 75.544,
+      "duration": 8.088,
+      "spoken": "Here is Aanya's order in the order book. Nine hundred rupees in order value, and no payment recorded yet."
+    },
+    {
+      "step": "rohan",
+      "start": 84.863,
+      "duration": 10.464,
+      "spoken": "Rohan wants Red Velvet. But the bakery has no capacity for this cake. What happens when a customer asks for something we cannot make?"
+    },
+    {
+      "step": "rohan_blocked",
+      "start": 96.522,
+      "duration": 11.136,
+      "spoken": "MADHAV blocks the booking, and lists available alternatives including Vanilla Cloud. It asks the customer to decide, instead of secretly changing the order."
+    },
+    {
+      "step": "rohan_followup",
+      "start": 109.389,
+      "duration": 8.184,
+      "spoken": "Now Rohan replies, Kal one vanilla cake kar do. I'm adding that as a new fictional customer message."
+    },
+    {
+      "step": "rohan_parse",
+      "start": 118.767,
+      "duration": 11.256,
+      "spoken": "We prepare the updated request. Vanilla Cloud is available at seven hundred and fifty rupees. This is the order we can safely review and reserve."
+    },
+    {
+      "step": "rohan_reserve",
+      "start": 131.282,
+      "duration": 6.528,
+      "spoken": "I approve the vanilla reservation and then the reply. Red Velvet was never booked."
+    },
+    {
+      "step": "meera",
+      "start": 138.993,
+      "duration": 9.768,
+      "spoken": "Next is Meera. She wants two boxes of cupcakes for tomorrow, and we need to keep the order amount separate from money actually received."
+    },
+    {
+      "step": "meera_parse",
+      "start": 149.949,
+      "duration": 10.728,
+      "spoken": "Each box is four hundred and twenty rupees. Two boxes come to eight hundred and forty. The owner reviews the price and quantity before booking."
+    },
+    {
+      "step": "meera_reserve",
+      "start": 161.909,
+      "duration": 7.368,
+      "spoken": "The order is now approved, and so is the reply. That still doesn't mean the customer has paid."
+    },
+    {
+      "step": "meera_orders",
+      "start": 170.458,
+      "duration": 9.0,
+      "spoken": "In the Orders screen, Meera's total is eight hundred and forty. Payment recording requires the owner to confirm it independently."
+    },
+    {
+      "step": "meera_payment",
+      "start": 181.145,
+      "duration": 7.968,
+      "spoken": "Suppose I've verified four hundred and twenty rupees received. I'll enter that amount now, then confirm it."
+    },
+    {
+      "step": "meera_balance",
+      "start": 190.271,
+      "duration": 9.648,
+      "spoken": "The remaining balance is four hundred and twenty rupees. Notice how the order total, paid amount and outstanding balance stay consistent."
+    },
+    {
+      "step": "close",
+      "start": 201.107,
+      "duration": 18.168,
+      "spoken": "That's MADHAV: checked order preparation, catalog-based pricing, capacity protection, and owner approval. This is a WhatsApp-style simulation, not a real WhatsApp integration. Next we plan to test with small businesses and build the official integration."
+    }
+  ]
+}
