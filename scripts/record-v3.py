@@ -10,7 +10,7 @@ URL=os.getenv("DEMO_URL","https://madhav-order-desk.opalsage3.chatgpt.site")
 BEATS=[
 ("intro","Meet MADHAV Order Desk: a simple way for small bakeries to turn customer messages into checked orders, with the owner in control.","MADHAV  /  REAL APP DEMO"),
 ("aanya","Aanya asks in Hinglish for one chocolate cake tomorrow. Let's prepare the reply.","AANYA  /  HINGLISH REQUEST"),
-("aanya_parse","This is a real AMD TokenFactory inference request. The model identifies her product, quantity and pickup date for owner review.","AMD LIVE  /  REQUEST UNDERSTANDING"),
+("aanya_parse","The sample parser identifies her product, quantity and pickup date for owner review. AMD live analysis is separately implemented, but not shown here.","AMD LIVE  /  REQUEST UNDERSTANDING"),
 ("aanya_price","The catalog—not the AI—sets the price at nine hundred rupees, with a suggested four hundred and fifty rupee advance.","₹900 TOTAL  /  ₹450 ADVANCE"),
 ("aanya_reserve","Only my approval reserves the cake. Preparing the draft never books it.","OWNER APPROVAL  /  RESERVE"),
 ("aanya_reply","I approve the reply separately. Here it appears in the demo chat; it's not a real WhatsApp send.","REPLY APPROVED  /  DEMO CHAT"),
@@ -20,7 +20,7 @@ BEATS=[
 ("rohan_followup","Rohan chooses vanilla in a follow-up. The new customer message is fictional demo data.","CUSTOMER CHOOSES VANILLA"),
 ("rohan_parse","We review the new proposal: one vanilla cake, seven hundred and fifty rupees.","VANILLA CLOUD  /  ₹750"),
 ("rohan_reserve","Now I approve the vanilla order and its reply. Red Velvet remains unbooked.","VANILLA APPROVED"),
-("meera","For this final example, I switch to sample rules. Meera needs two cupcake boxes tomorrow.","MEERA  /  TWO BOXES"),
+("meera","Meera needs two cupcake boxes tomorrow.","MEERA  /  TWO BOXES"),
 ("meera_parse","The catalog price is four hundred and twenty per box. That's eight hundred and forty in total.","2 × ₹420  =  ₹840"),
 ("meera_reserve","I reserve this order and approve the confirmation separately.","OWNER RESERVES"),
 ("meera_orders","In Orders, we can see the full eight hundred and forty rupee total.","ORDER VALUE  /  ₹840"),
@@ -52,13 +52,13 @@ def setup(page):
     page.wait_for_timeout(3800) # hydration before first React action
     choose(page,page.locator("nav button").filter(has_text="Setup"),"Setup")
     page.get_by_text("Choose your engine").wait_for(timeout=20000)
-    choose(page,page.locator("label.modechoice").filter(has_text="AMD live mode"),"AMD live mode")
+    choose(page,page.locator("label.modechoice").filter(has_text="Sample mode"),"Sample mode")
     choose(page,page.get_by_role("button",name="Reset sample workspace"),"Open reset")
     choose(page,page.get_by_role("button",name="Reset demo"),"Reset")
     choose(page,page.locator("nav button").filter(has_text="Inbox"),"Inbox")
     page.locator(".desk").wait_for(timeout=15000)
-    check("AMD live mode" in page.locator("body").inner_text(),"AMD live mode selected")
-DEMO_MODE="AMD LIVE"
+    check("Sample mode" in page.locator("body").inner_text(),"Sample mode selected")
+DEMO_MODE="SAMPLE RULES"
 def overlay(page,label,n):
     page.evaluate("""({label,n,mode})=>{
       if(!document.getElementById('studio-style')){
@@ -118,10 +118,6 @@ def action(page,k):
         reserve();check("Order reserved" in page.locator("body").inner_text(),"Vanilla reserved")
         send()
     elif k=="meera":
-        nav("Setup")
-        choose(page,page.locator("label.modechoice").filter(has_text="Sample mode"),"Switch to clearly labeled Sample mode")
-        DEMO_MODE="SAMPLE RULES"
-        nav("Inbox")
         select("Meera Shah");check("2 boxes of cupcakes" in page.locator(".conversation").inner_text(),"Meera chat")
     elif k=="meera_parse":
         prepare();check("₹840" in page.locator(".total").inner_text(),"₹840 proposal")
@@ -191,10 +187,10 @@ with sync_playwright() as p:
         for n,(a,b,c) in enumerate(cues,1):
             f.write(f"{n}\n{stamp(a)} --> {stamp(b)}\n{c}\n\n")
     wav=DIR/"narration.wav";silence.export(wav,format="wav")
-    report={"amd_live_mode":True,"verified_steps":len(events),"duration":raw_duration,
+    report={"amd_live_mode":False,"verified_steps":len(events),"duration":raw_duration,
         "narration":"en-US-AriaNeural","timing_drift":drift,"actions":events}
     (DIR/"recording-verification.json").write_text(json.dumps(report,indent=2))
-    mp4=DIR/"MADHAV-Order-Desk-LIVE-V3.mp4"
+    mp4=DIR/"MADHAV-Order-Desk-Showcase-V3.mp4"
     filt=f"scale=1920:1080,subtitles={sub}:force_style='FontName=DejaVu Sans,FontSize=20,PrimaryColour=&H00FFFFFF,OutlineColour=&H00101E31,Outline=2,Shadow=1,MarginV=115,Alignment=2'"
     subprocess.run(["ffmpeg","-y","-hide_banner","-loglevel","error","-i",str(raw),"-i",str(wav),
         "-filter_complex",f"[0:v]{filt}[v]","-map","[v]","-map","1:a",
