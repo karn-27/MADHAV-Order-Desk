@@ -1,0 +1,50 @@
+name: MADHAV live AMD V3 judged demo
+on:
+  push:
+    paths:
+      - .github/workflows/live-v3.yml
+      - scripts/record-v3.py
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  video:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install browser video and narration
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          python -m pip install --break-system-packages playwright edge-tts pydub
+          python -m playwright install --with-deps chromium
+      - name: Check script
+        run: python -m py_compile scripts/record-v3.py
+      - name: Record actual hosted app with live AMD
+        env:
+          DEMO_URL: https://madhav-order-desk.opalsage3.chatgpt.site
+        run: python -u scripts/record-v3.py
+      - name: Save MP4 and subtitles
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: MADHAV-LIVE-V3
+          path: |
+            demo-output-v3/MADHAV-Order-Desk-LIVE-V3.mp4
+            demo-output-v3/MADHAV-Synced-Captions.srt
+            demo-output-v3/recording-verification.json
+            demo-output-v3/verified-final-frame.png
+          if-no-files-found: warn
+      - name: Publish downloadable verified video
+        if: success()
+        run: |
+          mkdir -p media
+          cp demo-output-v3/MADHAV-Order-Desk-LIVE-V3.mp4 media/
+          cp demo-output-v3/MADHAV-Synced-Captions.srt media/MADHAV-LIVE-V3-Captions.srt
+          cp demo-output-v3/recording-verification.json media/MADHAV-LIVE-V3-Audit.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add media
+          git commit -m "Publish audited live AMD MADHAV V3 walkthrough"
+          git push
