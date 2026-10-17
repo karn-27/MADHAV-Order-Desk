@@ -4,7 +4,7 @@ from playwright.sync_api import sync_playwright
 from pydub import AudioSegment
 import edge_tts
 
-DIR=Path("demo-output-v2"); DIR.mkdir(exist_ok=True)
+DIR=Path("demo-output-v3"); DIR.mkdir(exist_ok=True)
 (DIR/"voice").mkdir(exist_ok=True)
 URL=os.getenv("DEMO_URL","https://madhav-order-desk.opalsage3.chatgpt.site")
 BEATS=[
@@ -184,10 +184,10 @@ with sync_playwright() as p:
         for n,(a,b,c) in enumerate(cues,1):
             f.write(f"{n}\n{stamp(a)} --> {stamp(b)}\n{c}\n\n")
     wav=DIR/"narration.wav";silence.export(wav,format="wav")
-    report={"sample_mode":False,"verified_steps":len(events),"duration":raw_duration,
+    report={"amd_live_mode":True,"verified_steps":len(events),"duration":raw_duration,
         "narration":"en-US-AriaNeural","timing_drift":drift,"actions":events}
     (DIR/"recording-verification.json").write_text(json.dumps(report,indent=2))
-    mp4=DIR/"MADHAV-Order-Desk-Showcase-v2.mp4"
+    mp4=DIR/"MADHAV-Order-Desk-LIVE-V3.mp4"
     filt=f"scale=1920:1080,subtitles={sub}:force_style='FontName=DejaVu Sans,FontSize=20,PrimaryColour=&H00FFFFFF,OutlineColour=&H00101E31,Outline=2,Shadow=1,MarginV=115,Alignment=2'"
     subprocess.run(["ffmpeg","-y","-hide_banner","-loglevel","error","-i",str(raw),"-i",str(wav),
         "-filter_complex",f"[0:v]{filt}[v]","-map","[v]","-map","1:a",
