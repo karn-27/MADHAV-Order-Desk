@@ -107,10 +107,10 @@ def action(page,k):
         check("Not enough capacity" in out and "Available alternatives" in out and "Vanilla Cloud" in out,"Rohan blocked and alternatives")
         check(not page.get_by_role("button",name="Approve & reserve order").is_enabled(),"No red velvet reservation")
     elif k=="rohan_followup":
-        page.locator("#message-input").fill("Kal 1 vanilla cake kar do")
+        page.locator("#message-input").fill("Kal 1 vanilla cake book karna hai")
         page.wait_for_timeout(500)
         choose(page,page.get_by_role("button",name="Add simulated customer message"),"Add customer follow-up")
-        check("Kal 1 vanilla cake kar do" in page.locator(".conversation").inner_text(),"Vanilla follow-up shown")
+        check("Kal 1 vanilla cake book karna hai" in page.locator(".conversation").inner_text(),"Vanilla follow-up shown")
     elif k=="rohan_parse":
         prepare();check("₹750" in page.locator(".total").inner_text(),"₹750 vanilla proposal")
         check(page.get_by_role("button",name="Approve & reserve order").is_enabled(),"Vanilla bookable")
