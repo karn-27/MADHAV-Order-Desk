@@ -1,0 +1,30 @@
+name: Check hosted AMD demo access
+on:
+  push:
+    paths:
+      - .github/workflows/check-hosted-demo.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check published demo from outside
+        run: |
+          python3 - <<'PY'
+          import urllib.request,json
+          root="https://madhav-order-desk.opalsage3.chatgpt.site"
+          for path in ["/","/api/analyze"]:
+              try:
+                  with urllib.request.urlopen(urllib.request.Request(root+path,headers={"User-Agent":"MADHAV-Demo-Preflight/1.0"}),timeout=25) as resp:
+                      body=resp.read(2048).decode("utf-8","replace")
+                      if path.endswith("analyze"):
+                          try:
+                              j=json.loads(body)
+                              print("APP_API_STATUS",resp.status,"AMD_CONFIGURED",bool(j.get("configured")),"MODEL",j.get("model"))
+                          except:print("APP_API_RESPONSE_NONJSON",resp.status,body[:100])
+                      else: print("APP_PAGE_STATUS",resp.status,"HTML",("<html" in body.lower()))
+              except Exception as e:
+                  print("APP_URL_ERROR",path,type(e).__name__,str(e)[:250])
+          PY
