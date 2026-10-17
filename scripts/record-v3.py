@@ -20,7 +20,7 @@ BEATS=[
 ("rohan_followup","Rohan chooses vanilla in a follow-up. The new customer message is fictional demo data.","CUSTOMER CHOOSES VANILLA"),
 ("rohan_parse","We review the new proposal: one vanilla cake, seven hundred and fifty rupees.","VANILLA CLOUD  /  ₹750"),
 ("rohan_reserve","Now I approve the vanilla order and its reply. Red Velvet remains unbooked.","VANILLA APPROVED"),
-("meera","Meera needs two cupcake boxes tomorrow.","MEERA  /  TWO BOXES"),
+("meera","For this final example, I switch to sample rules. Meera needs two cupcake boxes tomorrow.","MEERA  /  TWO BOXES"),
 ("meera_parse","The catalog price is four hundred and twenty per box. That's eight hundred and forty in total.","2 × ₹420  =  ₹840"),
 ("meera_reserve","I reserve this order and approve the confirmation separately.","OWNER RESERVES"),
 ("meera_orders","In Orders, we can see the full eight hundred and forty rupee total.","ORDER VALUE  /  ₹840"),
@@ -58,8 +58,9 @@ def setup(page):
     choose(page,page.locator("nav button").filter(has_text="Inbox"),"Inbox")
     page.locator(".desk").wait_for(timeout=15000)
     check("AMD live mode" in page.locator("body").inner_text(),"AMD live mode selected")
+DEMO_MODE="AMD LIVE"
 def overlay(page,label,n):
-    page.evaluate("""({label,n})=>{
+    page.evaluate("""({label,n,mode})=>{
       if(!document.getElementById('studio-style')){
         let s=document.createElement('style');s.id='studio-style';
         s.textContent='#studio-bar{position:fixed;bottom:10px;left:260px;right:20px;z-index:9900;border-radius:10px;background:rgba(22,32,47,.94);padding:13px 18px;color:white;box-shadow:0 4px 20px #0003;font:600 17px/1.1 Arial,sans-serif;pointer-events:none} #studio-tag{position:fixed;top:10px;right:14px;z-index:9900;border-radius:40px;background:#fff;color:#334155;padding:7px 12px;font:600 11px Arial,sans-serif;pointer-events:none}';
@@ -68,16 +69,18 @@ def overlay(page,label,n):
       let b=document.getElementById('studio-bar');if(!b){b=document.createElement('div');b.id='studio-bar';document.body.appendChild(b)}
       b.textContent=String(n).padStart(2,'0')+'   /   '+label;
       if(!document.getElementById('studio-tag')){
-        let t=document.createElement('div');t.id='studio-tag';t.textContent='FICTIONAL CUSTOMERS · AMD LIVE';document.body.appendChild(t)
+        let t=document.createElement('div');t.id='studio-tag';t.textContent='FICTIONAL CUSTOMERS · '+mode;document.body.appendChild(t)
       }
-    }""",{"label":label,"n":n})
+    }""",{"label":label,"n":n,"mode":DEMO_MODE})
 def action(page,k):
+    global DEMO_MODE
     select=lambda who:choose(page,page.locator("button.chatrow").filter(has_text=who),who)
     nav=lambda tab:choose(page,page.locator("nav button").filter(has_text=tab),tab)
     def prepare():
         choose(page,page.get_by_role("button",name="Prepare reply"),"Prepare reply")
-        page.locator(".proposal").wait_for(timeout=60000)
-        check("AMD" in page.locator(".sourcelabel").inner_text(),"Live AMD result visible")
+        page.locator(".proposal").wait_for(timeout=60000 if DEMO_MODE=="AMD LIVE" else 12000)
+        label=page.locator(".sourcelabel").inner_text()
+        check("AMD" in label if DEMO_MODE=="AMD LIVE" else "Sample" in label, DEMO_MODE+" source verified")
     reserve=lambda:choose(page,page.get_by_role("button",name="Approve & reserve order"),"Reserve")
     send=lambda:choose(page,page.get_by_role("button",name="Approve reply"),"Approve reply")
     if k=="intro":check("Good conversations" in page.locator("body").inner_text(),"Overview")
@@ -115,6 +118,10 @@ def action(page,k):
         reserve();check("Order reserved" in page.locator("body").inner_text(),"Vanilla reserved")
         send()
     elif k=="meera":
+        nav("Setup")
+        choose(page,page.locator("label.modechoice").filter(has_text="Sample mode"),"Switch to clearly labeled Sample mode")
+        DEMO_MODE="SAMPLE RULES"
+        nav("Inbox")
         select("Meera Shah");check("2 boxes of cupcakes" in page.locator(".conversation").inner_text(),"Meera chat")
     elif k=="meera_parse":
         prepare();check("₹840" in page.locator(".total").inner_text(),"₹840 proposal")
