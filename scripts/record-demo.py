@@ -83,6 +83,7 @@ with sync_playwright() as p:
             attempt(lambda:page.get_by_role("button",name="Prepare reply").click(),"Prepare vanilla")
             page.wait_for_timeout(1500)
             attempt(lambda:page.get_by_role("button",name="Approve & reserve order").click(),"Reserve vanilla")
+            assert "MD-" in page.locator("body").inner_text(), "Vanilla reservation absent"
             page.wait_for_timeout(1300)
             attempt(lambda:page.get_by_role("button",name="Approve reply").click(),"Approve Rohan reply")
         if id=="meera":
