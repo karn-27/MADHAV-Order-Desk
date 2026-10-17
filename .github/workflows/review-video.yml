@@ -1,0 +1,46 @@
+name: Assess showcase readability
+on:
+  workflow_dispatch:
+  push:
+    paths: [.github/workflows/review-video.yml]
+permissions:
+  contents: write
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Review screenshots, timing and sound
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -qq -y ffmpeg python3-pil
+          python3 - <<'PY'
+          import subprocess, json, re, os
+          from PIL import Image, ImageDraw, ImageFont
+          from pathlib import Path
+          src='media/MADHAV-Order-Desk-Showcase-v2.mp4'
+          dest=Path('media/review');dest.mkdir(parents=True,exist_ok=True)
+          timestamps=[0,15,30,45,60,75,90,105,120,135,150,165,180,195,210]
+          out=Image.new('RGB',(4*600,4*360),(20,24,29))
+          font=ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf',25)
+          d=ImageDraw.Draw(out)
+          for i,t in enumerate(timestamps):
+              f=dest/f'frame-{t:03d}.jpg'
+              subprocess.run(['ffmpeg','-y','-hide_banner','-loglevel','error','-ss',str(t),'-i',src,'-frames:v','1','-vf','scale=600:338:force_original_aspect_ratio=decrease,pad=600:338:(ow-iw)/2:(oh-ih)/2',str(f)],check=True)
+              im=Image.open(f).convert('RGB')
+              x=(i%4)*600;y=(i//4)*360
+              out.paste(im,(x,y))
+              d.text((x+14,y+338),f'{t//60:02}:{t%60:02}',font=font,fill=(255,255,255))
+          out.save(dest/'contact-sheet.jpg',quality=90,optimize=True)
+          probe=json.loads(subprocess.check_output(['ffprobe','-v','error','-show_format','-show_streams','-of','json',src]))
+          summary={'duration':probe['format'].get('duration'), 'size':probe['format'].get('size'),'streams':[{'codec_type':s.get('codec_type'),'codec_name':s.get('codec_name'),'width':s.get('width'),'height':s.get('height'),'sample_rate':s.get('sample_rate'),'bit_rate':s.get('bit_rate')} for s in probe['streams']]}
+          (dest/'technical-review.json').write_text(json.dumps(summary,indent=2))
+          print('TECHNICAL_REVIEW',json.dumps(summary))
+          PY
+      - name: Publish contact sheet and technical report
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add media/review/
+          git commit -m 'Add review stills and technical validation for showcase V2'
+          git push
