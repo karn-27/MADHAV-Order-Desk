@@ -49,6 +49,7 @@ def choose(page,locator,msg):
 def setup(page):
     page.goto(URL,wait_until="domcontentloaded",timeout=90000)
     page.get_by_text("Aanya Kapoor").first.wait_for(timeout=30000)
+    page.wait_for_timeout(3800) # hydration before first React action
     choose(page,page.locator("nav button").filter(has_text="Setup"),"Setup")
     page.get_by_text("Choose your engine").wait_for(timeout=20000)
     choose(page,page.locator("label.modechoice").filter(has_text="Sample mode"),"Sample mode")
@@ -143,7 +144,7 @@ with sync_playwright() as p:
     page=ctx.new_page();video=page.video
     page.goto(URL,wait_until="domcontentloaded",timeout=90000)
     page.get_by_text("Aanya Kapoor").first.wait_for(timeout=30000)
-    page.wait_for_timeout(1000)
+    page.wait_for_timeout(2500)
     events=[]
     for i,(key,speech,label) in enumerate(BEATS):
         action(page,key)
