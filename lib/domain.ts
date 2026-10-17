@@ -58,7 +58,7 @@ export function nextDate(date:string){const d=new Date(date+'T12:00:00Z');d.setU
 export function sampleParse(text:string,referenceDate=businessDate()):Proposal{
  const t=text.toLowerCase();const language=/\b(hai|chahiye|kal|ka|kya|bhai|milega|kar|chahie)\b/.test(t)?'hi':'en';
  const productId=/red\s?velvet/.test(t)?'redvelvet':/chocol|truffle/.test(t)?'chocolate':/cupcake/.test(t)?'cupcakes':/vanilla/.test(t)?'vanilla':null;
- const intent=/\b(book|order|reserve|chahiye|chahie|need|want|kar\\s+do)\b/.test(t)?'order':productId||/menu|catalog|price|rate|available/.test(t)?'question':'handoff';
+ const intent=/\b(book|order|reserve|chahiye|chahie|need|want|kar\s+do)\b/.test(t)?'order':productId||/menu|catalog|price|rate|available/.test(t)?'question':'handoff';
  const explicit=t.match(/\b(\d+)\s*(?:(?:chocolate|truffle|vanilla|red\s*velvet)\s+)?(?:boxes|box|cakes|cake|packs)\b/);const quantity=explicit?Number(explicit[1]):null;
  const date=t.match(/\d{4}-\d{2}-\d{2}/)?.[0]??(/tomorrow|\bkal\b/.test(t)?nextDate(referenceDate):/today|\baaj\b/.test(t)?referenceDate:null);
  return {intent,productId,quantity,date,language,note:`Sample parser · reference date ${referenceDate} (India). Owner checks every detail.`,missing:[...(!productId?['Product']:[]),...(!quantity?['Quantity']:[]),...(!date?['Pickup date']:[])]};
