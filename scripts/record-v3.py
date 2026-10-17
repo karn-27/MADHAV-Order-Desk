@@ -167,11 +167,11 @@ with sync_playwright() as p:
         "-of","default=nw=1:nk=1",str(raw)],text=True)
     raw_duration=float(probe.strip())
     drift=raw_duration-elapsed
-    check(abs(drift)<2.5,f"Timing drift <2.5 seconds: {drift:.2f}")
-    silence=AudioSegment.silent(duration=round((raw_duration+1)*1000),frame_rate=44100)
+    check(0<=drift<15,f"Trim initial browser setup capture ({drift:.2f}s)")
+    silence=AudioSegment.silent(duration=round((raw_duration-drift+1)*1000),frame_rate=44100)
     cues=[]
     for i,e in enumerate(events):
-        t=e["start"]+max(0,drift)
+        t=e["start"]
         silence=silence.overlay(voices[i],position=round(t*1000))
         words=e["spoken"].split()
         groups=[" ".join(words[j:j+10]) for j in range(0,len(words),10)]
@@ -185,12 +185,12 @@ with sync_playwright() as p:
         for n,(a,b,c) in enumerate(cues,1):
             f.write(f"{n}\n{stamp(a)} --> {stamp(b)}\n{c}\n\n")
     wav=DIR/"narration.wav";silence.export(wav,format="wav")
-    report={"amd_live_mode":False,"verified_steps":len(events),"duration":raw_duration,
+    report={"amd_live_mode":False,"verified_steps":len(events),"duration":raw_duration-drift,
         "narration":"en-US-AriaNeural","timing_drift":drift,"actions":events}
     (DIR/"recording-verification.json").write_text(json.dumps(report,indent=2))
     mp4=DIR/"MADHAV-Order-Desk-Showcase-V3.mp4"
     filt=f"scale=1920:1080,subtitles={sub}:force_style='FontName=DejaVu Sans,FontSize=20,PrimaryColour=&H00FFFFFF,OutlineColour=&H00101E31,Outline=2,Shadow=1,MarginV=115,Alignment=2'"
-    subprocess.run(["ffmpeg","-y","-hide_banner","-loglevel","error","-i",str(raw),"-i",str(wav),
+    subprocess.run(["ffmpeg","-y","-hide_banner","-loglevel","error","-ss",str(drift),"-i",str(raw),"-i",str(wav),
         "-filter_complex",f"[0:v]{filt}[v]","-map","[v]","-map","1:a",
         "-c:v","libx264","-preset","veryfast","-crf","23","-pix_fmt","yuv420p",
         "-c:a","aac","-b:a","160k","-movflags","+faststart","-shortest",str(mp4)],check=True)
