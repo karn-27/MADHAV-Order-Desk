@@ -38,7 +38,8 @@ with open(OUT/"MADHAV-Demo-Captions.srt","w") as f:
 
 def attempt(action,desc):
     try: action(); print("STEP OK:",desc,flush=True)
-    except Exception as e:\n        print("STEP FAILED:",desc,str(e)[:300],flush=True)
+    except Exception as e:
+        print("STEP FAILED:",desc,str(e)[:300],flush=True)
         raise
 
 def hold(t0,duration):
