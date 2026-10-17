@@ -1,0 +1,51 @@
+name: Record MADHAV application demo
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/record-demo.yml"
+      - "scripts/record-demo.py"
+
+permissions:
+  contents: read
+
+jobs:
+  demo:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - run: corepack enable && corepack prepare pnpm@11.25.0 --activate
+      - name: Install app
+        run: pnpm install --frozen-lockfile
+      - name: Install video tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          python -m pip install --break-system-packages playwright edge-tts pydub
+          python -m playwright install --with-deps chromium
+      - name: Start app in sample mode
+        run: |
+          (pnpm dev --host 127.0.0.1 > /tmp/madhav-app.log 2>&1 & echo $! > /tmp/madhav-app.pid)
+          for i in $(seq 1 90); do
+            if curl -fsS http://127.0.0.1:5173/ > /dev/null; then exit 0; fi
+            sleep 3
+          done
+          tail -100 /tmp/madhav-app.log
+          exit 1
+      - name: Record browser and voice-over
+        run: python scripts/record-demo.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: MADHAV-Actual-App-Demo
+          path: |
+            demo-output/MADHAV-Actual-App-Demo.mp4
+            demo-output/MADHAV-Demo-Captions.srt
+            demo-output/app-start.png
+            /tmp/madhav-app.log
+          if-no-files-found: warn
