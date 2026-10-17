@@ -38,7 +38,7 @@ with open(OUT/"MADHAV-Demo-Captions.srt","w") as f:
 
 def attempt(action,desc):
     try: action(); print("STEP OK:",desc,flush=True)
-    except Exception as e: print("STEP FAILED:",desc,str(e)[:300],flush=True)
+    except Exception as e:\n        print("STEP FAILED:",desc,str(e)[:300],flush=True)\n        raise
 
 def hold(t0,duration):
     remain=duration-(time.monotonic()-t0)
@@ -57,14 +57,14 @@ with sync_playwright() as p:
     attempt(lambda:page.get_by_text("Sample mode",exact=True).first.click(),"Select sample mode")
     attempt(lambda:page.get_by_role("button",name="Reset sample workspace").click(),"Reset control")
     attempt(lambda:page.get_by_role("button",name="Reset demo").click(),"Fresh workspace")
-    attempt(lambda:page.get_by_role("button",name="Inbox").click(),"Inbox")
+    attempt(lambda:page.locator("nav button").filter(has_text="Inbox").click(),"Inbox")
     starts=[]
     for id,script,duration in scenes:
         t=time.monotonic();starts.append((id,t))
         if id=="intro":
             attempt(lambda:page.get_by_role("button",name="Inbox").click(),"Opening inbox")
         if id=="aanya":
-            attempt(lambda:page.get_by_role("button",name="Aanya Kapoor Demo").click(),"Aanya customer")
+            attempt(lambda:page.locator("button.chatrow").filter(has_text="Aanya Kapoor").click(),"Aanya customer")
             attempt(lambda:page.get_by_role("button",name="Prepare reply").click(),"Prepare Aanya")
             page.wait_for_timeout(1300)
             attempt(lambda:page.get_by_role("button",name="Approve & reserve order").click(),"Reserve Aanya")
@@ -75,7 +75,7 @@ with sync_playwright() as p:
             page.wait_for_timeout(2300)
             attempt(lambda:page.get_by_role("button",name="Inbox",exact=False).first.click(),"Back to inbox")
         if id=="rohan":
-            attempt(lambda:page.get_by_role("button",name="Rohan Mehta Demo").click(),"Rohan customer")
+            attempt(lambda:page.locator("button.chatrow").filter(has_text="Rohan Mehta").click(),"Rohan customer")
             attempt(lambda:page.get_by_role("button",name="Prepare reply").click(),"Prepare Red Velvet")
             page.wait_for_timeout(5000)
             attempt(lambda:page.locator("#message-input").fill("Kal 1 vanilla cake kar do"),"Rohan chooses vanilla")
@@ -86,7 +86,7 @@ with sync_playwright() as p:
             page.wait_for_timeout(1300)
             attempt(lambda:page.get_by_role("button",name="Approve reply").click(),"Approve Rohan reply")
         if id=="meera":
-            attempt(lambda:page.get_by_role("button",name="Meera Shah Demo").click(),"Meera customer")
+            attempt(lambda:page.locator("button.chatrow").filter(has_text="Meera Shah").click(),"Meera customer")
             attempt(lambda:page.get_by_role("button",name="Prepare reply").click(),"Prepare cupcakes")
             page.wait_for_timeout(1600)
             attempt(lambda:page.get_by_role("button",name="Approve & reserve order").click(),"Reserve cupcakes")
