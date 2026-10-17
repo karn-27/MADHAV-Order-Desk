@@ -53,7 +53,7 @@ jobs:
                       continue
                   parts = relative.parts
                   name = parts[-1].lower()
-                  if (any(part in {".git",".github","node_modules",".next",".wrangler",".vinext",".cache",".venv","dist","build"} for part in parts)
+                  if (any(part in {".git",".github","node_modules",".next",".wrangler",".vinext",".cache",".venv","dist"} for part in parts)
                       or (name.startswith(".env") and name not in {".env.example", ".env.sample"})
                       or (name.startswith(".dev.vars") and name != ".dev.vars.example")
                       or name in {"id_rsa", "id_ed25519", ".npmrc", "credentials.json", "service-account.json"}
@@ -64,9 +64,11 @@ jobs:
                   if destination == Path("README.md"):
                       skipped.append(str(p))
                       continue
-                  if destination.exists():
-                      raise SystemExit("Refusing to replace existing repository file: " + str(destination))
                   data = z.read(v)
+                  if destination.exists():
+                      if destination.read_bytes() == data:
+                          continue
+                      raise SystemExit("Refusing to replace modified repository file: " + str(destination))
                   if destination.suffix.lower() in {".ts",".tsx",".js",".jsx",".json",".md",".txt",".yaml",".yml",".toml",".py",".sh"}:
                       if re.search(rb'-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----', data):
                           raise SystemExit("Possible private key in " + str(destination))
