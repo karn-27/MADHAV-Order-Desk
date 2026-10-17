@@ -90,6 +90,11 @@ their baseline. A monthly subscription is a hypothesis to test, not validated
 revenue. Production work includes the official WhatsApp API, durable storage,
 authentication and payment webhooks.
 
+
+## Future WhatsApp integration
+
+**Not connected yet.** The current app simulates chats; it does not receive or send live WhatsApp messages. The architecture, phased implementation, test-number-first approach, and safeguards for keeping an existing Android shop number are described in [WhatsApp Integration Roadmap](docs/WHATSAPP_INTEGRATION.md). Do not migrate or delete a shop account merely to test this prototype.
+
 ## Attribution
 
 Project owner: Mohit Joshi. Code, design and submission materials were developed
