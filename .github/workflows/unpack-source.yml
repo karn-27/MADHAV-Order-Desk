@@ -1,0 +1,98 @@
+name: Publish extracted MADHAV source
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/unpack-source.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  extract-source:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate and extract source ZIP
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path, PurePosixPath
+          import zipfile, stat, re
+          path = Path("MADHAV-Source.zip")
+          if not path.is_file():
+              raise SystemExit("Missing MADHAV-Source.zip")
+          with zipfile.ZipFile(path) as z:
+              entries = [v for v in z.infolist() if not v.is_dir()]
+              if len(entries) > 1200 or sum(v.file_size for v in entries) > 30_000_000:
+                  raise SystemExit("ZIP exceeds source-size safety limits")
+              for v in entries:
+                  p = PurePosixPath(v.filename.replace("\\", "/"))
+                  if p.is_absolute() or ".." in p.parts or "\\" in v.filename:
+                      raise SystemExit("Unsafe archive path")
+                  if stat.S_ISLNK(v.external_attr >> 16):
+                      raise SystemExit("Symlink in source archive")
+              packages = [PurePosixPath(v.filename) for v in entries
+                          if PurePosixPath(v.filename).name == "package.json"
+                          and "node_modules" not in PurePosixPath(v.filename).parts]
+              if not packages:
+                  raise SystemExit("No package.json found in source ZIP")
+              root = min(packages, key=lambda p: len(p.parts)).parent
+              print("Source root:", root)
+              written = 0
+              skipped = []
+              for v in entries:
+                  p = PurePosixPath(v.filename)
+                  if p.parts[:len(root.parts)] != root.parts:
+                      skipped.append(str(p))
+                      continue
+                  relative = PurePosixPath(*p.parts[len(root.parts):])
+                  if not relative.parts:
+                      continue
+                  parts = relative.parts
+                  name = parts[-1].lower()
+                  if (any(part in {".git",".github","node_modules",".next",".wrangler",".vinext",".cache",".venv","dist","build"} for part in parts)
+                      or (name.startswith(".env") and name not in {".env.example", ".env.sample"})
+                      or (name.startswith(".dev.vars") and name != ".dev.vars.example")
+                      or name in {"id_rsa", "id_ed25519", ".npmrc", "credentials.json", "service-account.json"}
+                      or name.endswith((".pem",".p12",".pfx",".key"))):
+                      skipped.append(str(p))
+                      continue
+                  destination = Path(*parts)
+                  if destination == Path("README.md"):
+                      skipped.append(str(p))
+                      continue
+                  if destination.exists():
+                      raise SystemExit("Refusing to replace existing repository file: " + str(destination))
+                  data = z.read(v)
+                  if destination.suffix.lower() in {".ts",".tsx",".js",".jsx",".json",".md",".txt",".yaml",".yml",".toml",".py",".sh"}:
+                      if re.search(rb'-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----', data):
+                          raise SystemExit("Possible private key in " + str(destination))
+                  destination.parent.mkdir(parents=True, exist_ok=True)
+                  destination.write_bytes(data)
+                  written += 1
+              if not Path("package.json").is_file():
+                  raise SystemExit("Source extraction failed: root package.json absent")
+              print("Files extracted:", written)
+              print("Files intentionally skipped:", len(skipped), skipped[:25])
+          PY
+      - name: Publish files to GitHub
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No new files to commit"
+          else
+            git commit -m "Publish extracted MADHAV Order Desk application source"
+            git push origin HEAD:main
+          fi
+      - name: Run source tests and build
+        continue-on-error: true
+        run: |
+          if ! command -v npm >/dev/null; then exit 1; fi
+          npm ci
+          npm test
+          npm run build
