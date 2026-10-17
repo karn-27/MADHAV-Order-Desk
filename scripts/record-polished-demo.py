@@ -50,10 +50,12 @@ def setup(page):
     page.goto(URL,wait_until="domcontentloaded",timeout=90000)
     page.get_by_text("Aanya Kapoor").first.wait_for(timeout=30000)
     choose(page,page.locator("nav button").filter(has_text="Setup"),"Setup")
-    choose(page,page.get_by_text("Sample mode",exact=True).first,"Sample mode")
+    page.get_by_text("Choose your engine").wait_for(timeout=20000)
+    choose(page,page.locator("label.modechoice").filter(has_text="Sample mode"),"Sample mode")
     choose(page,page.get_by_role("button",name="Reset sample workspace"),"Open reset")
     choose(page,page.get_by_role("button",name="Reset demo"),"Reset")
     choose(page,page.locator("nav button").filter(has_text="Inbox"),"Inbox")
+    page.locator(".desk").wait_for(timeout=15000)
     check("Sample mode" in page.locator("body").inner_text(),"Sample mode selected")
 def overlay(page,label,n):
     page.evaluate("""({label,n})=>{
