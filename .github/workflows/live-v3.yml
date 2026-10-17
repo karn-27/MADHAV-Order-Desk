@@ -1,4 +1,4 @@
-name: MADHAV live AMD V3 judged demo
+name: MADHAV V3 verified demo with honest sample mode
 on:
   push:
     paths:
@@ -21,7 +21,7 @@ jobs:
           python -m playwright install --with-deps chromium
       - name: Check script
         run: python -m py_compile scripts/record-v3.py
-      - name: Record actual hosted app with live AMD
+      - name: Record actual hosted app with reliable sample rules
         env:
           DEMO_URL: https://madhav-order-desk.opalsage3.chatgpt.site
         run: python -u scripts/record-v3.py
@@ -29,9 +29,9 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: MADHAV-LIVE-V3
+          name: MADHAV-Showcase-V3
           path: |
-            demo-output-v3/MADHAV-Order-Desk-LIVE-V3.mp4
+            demo-output-v3/MADHAV-Order-Desk-Showcase-V3.mp4
             demo-output-v3/MADHAV-Synced-Captions.srt
             demo-output-v3/recording-verification.json
             demo-output-v3/verified-final-frame.png
@@ -40,9 +40,9 @@ jobs:
         if: success()
         run: |
           mkdir -p media
-          cp demo-output-v3/MADHAV-Order-Desk-LIVE-V3.mp4 media/
-          cp demo-output-v3/MADHAV-Synced-Captions.srt media/MADHAV-LIVE-V3-Captions.srt
-          cp demo-output-v3/recording-verification.json media/MADHAV-LIVE-V3-Audit.json
+          cp demo-output-v3/MADHAV-Order-Desk-Showcase-V3.mp4 media/
+          cp demo-output-v3/MADHAV-Synced-Captions.srt media/MADHAV-Showcase-V3-Captions.srt
+          cp demo-output-v3/recording-verification.json media/MADHAV-Showcase-V3-Audit.json
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add media
