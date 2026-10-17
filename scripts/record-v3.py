@@ -145,12 +145,10 @@ with sync_playwright() as p:
     browser=p.chromium.launch(headless=True,args=["--no-sandbox","--disable-dev-shm-usage"])
     ctx=browser.new_context(viewport={"width":1600,"height":900},device_scale_factor=1,
         record_video_dir=str(DIR/"recordings"),record_video_size={"width":1600,"height":900})
-    prep=ctx.new_page();setup(prep);prep.close()
-    start=time.monotonic()
     page=ctx.new_page();video=page.video
-    page.goto(URL,wait_until="domcontentloaded",timeout=90000)
-    page.get_by_text("Aanya Kapoor").first.wait_for(timeout=30000)
-    page.wait_for_timeout(3800)
+    setup(page)
+    start=time.monotonic()
+    page.wait_for_timeout(900)
     events=[]
     for i,(key,speech,label) in enumerate(BEATS):
         action(page,key)
