@@ -1,0 +1,123 @@
+{
+  "amd_live_mode": false,
+  "verified_steps": 19,
+  "duration": 144.89023243399998,
+  "narration": "en-US-AriaNeural",
+  "timing_drift": 6.069767566000024,
+  "actions": [
+    {
+      "step": "intro",
+      "start": 1.459,
+      "duration": 7.488,
+      "spoken": "Meet MADHAV Order Desk: a simple way for small bakeries to turn customer messages into checked orders, with the owner in control."
+    },
+    {
+      "step": "aanya",
+      "start": 10.132,
+      "duration": 5.496,
+      "spoken": "Aanya asks in Hinglish for one chocolate cake tomorrow. Let's prepare the reply."
+    },
+    {
+      "step": "aanya_parse",
+      "start": 16.815,
+      "duration": 9.648,
+      "spoken": "The sample parser identifies her product, quantity and pickup date for owner review. AMD live analysis is separately implemented, but not shown here."
+    },
+    {
+      "step": "aanya_price",
+      "start": 27.624,
+      "duration": 7.056,
+      "spoken": "The catalog\u2014not the AI\u2014sets the price at nine hundred rupees, with a suggested four hundred and fifty rupee advance."
+    },
+    {
+      "step": "aanya_reserve",
+      "start": 35.866,
+      "duration": 5.064,
+      "spoken": "Only my approval reserves the cake. Preparing the draft never books it."
+    },
+    {
+      "step": "aanya_reply",
+      "start": 42.118,
+      "duration": 6.36,
+      "spoken": "I approve the reply separately. Here it appears in the demo chat; it's not a real WhatsApp send."
+    },
+    {
+      "step": "aanya_orders",
+      "start": 49.664,
+      "duration": 5.784,
+      "spoken": "The order book now shows Aanya's nine hundred rupee order. No payment has been recorded."
+    },
+    {
+      "step": "rohan",
+      "start": 56.667,
+      "duration": 5.352,
+      "spoken": "Rohan wants Red Velvet. Let's check what happens when a product is sold out."
+    },
+    {
+      "step": "rohan_blocked",
+      "start": 63.208,
+      "duration": 8.544,
+      "spoken": "Capacity is zero. MADHAV blocks the booking and offers available alternatives. It never substitutes a product automatically."
+    },
+    {
+      "step": "rohan_followup",
+      "start": 73.466,
+      "duration": 5.952,
+      "spoken": "Rohan chooses vanilla in a follow-up. The new customer message is fictional demo data."
+    },
+    {
+      "step": "rohan_parse",
+      "start": 80.604,
+      "duration": 4.872,
+      "spoken": "We review the new proposal: one vanilla cake, seven hundred and fifty rupees."
+    },
+    {
+      "step": "rohan_reserve",
+      "start": 86.708,
+      "duration": 5.616,
+      "spoken": "Now I approve the vanilla order and its reply. Red Velvet remains unbooked."
+    },
+    {
+      "step": "meera",
+      "start": 93.494,
+      "duration": 3.0,
+      "spoken": "Meera needs two cupcake boxes tomorrow."
+    },
+    {
+      "step": "meera_parse",
+      "start": 97.69,
+      "duration": 5.64,
+      "spoken": "The catalog price is four hundred and twenty per box. That's eight hundred and forty in total."
+    },
+    {
+      "step": "meera_reserve",
+      "start": 104.55,
+      "duration": 3.648,
+      "spoken": "I reserve this order and approve the confirmation separately."
+    },
+    {
+      "step": "meera_orders",
+      "start": 109.379,
+      "duration": 3.84,
+      "spoken": "In Orders, we can see the full eight hundred and forty rupee total."
+    },
+    {
+      "step": "meera_payment",
+      "start": 114.877,
+      "duration": 5.712,
+      "spoken": "Now I manually record four hundred and twenty rupees received, after independent confirmation."
+    },
+    {
+      "step": "meera_balance",
+      "start": 121.747,
+      "duration": 7.992,
+      "spoken": "MADHAV shows four hundred and twenty paid, and four hundred and twenty still due. A payment claim never changes the ledger automatically."
+    },
+    {
+      "step": "close",
+      "start": 130.91,
+      "duration": 12.288,
+      "spoken": "AMD handles language understanding. Our code enforces prices, stock and owner approval. This is a chat simulation; official WhatsApp integration comes later. That's MADHAV."
+    }
+  ]
+}

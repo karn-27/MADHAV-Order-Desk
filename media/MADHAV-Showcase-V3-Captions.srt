@@ -1,0 +1,160 @@
+1
+00:00:01,459 --> 00:00:04,863
+Meet MADHAV Order Desk: a simple way for small bakeries
+
+2
+00:00:04,863 --> 00:00:08,266
+to turn customer messages into checked orders, with the owner
+
+3
+00:00:08,266 --> 00:00:08,947
+in control.
+
+4
+00:00:10,132 --> 00:00:14,360
+Aanya asks in Hinglish for one chocolate cake tomorrow. Let's
+
+5
+00:00:14,360 --> 00:00:15,628
+prepare the reply.
+
+6
+00:00:16,815 --> 00:00:21,010
+The sample parser identifies her product, quantity and pickup date
+
+7
+00:00:21,010 --> 00:00:25,205
+for owner review. AMD live analysis is separately implemented, but
+
+8
+00:00:25,205 --> 00:00:26,463
+not shown here.
+
+9
+00:00:27,624 --> 00:00:31,338
+The catalog—not the AI—sets the price at nine hundred rupees,
+
+10
+00:00:31,338 --> 00:00:34,680
+with a suggested four hundred and fifty rupee advance.
+
+11
+00:00:35,866 --> 00:00:40,086
+Only my approval reserves the cake. Preparing the draft never
+
+12
+00:00:40,086 --> 00:00:40,930
+books it.
+
+13
+00:00:42,118 --> 00:00:45,651
+I approve the reply separately. Here it appears in the
+
+14
+00:00:45,651 --> 00:00:48,478
+demo chat; it's not a real WhatsApp send.
+
+15
+00:00:49,664 --> 00:00:53,520
+The order book now shows Aanya's nine hundred rupee order.
+
+16
+00:00:53,520 --> 00:00:55,448
+No payment has been recorded.
+
+17
+00:00:56,667 --> 00:01:00,490
+Rohan wants Red Velvet. Let's check what happens when a
+
+18
+00:01:00,490 --> 00:01:02,019
+product is sold out.
+
+19
+00:01:03,208 --> 00:01:08,234
+Capacity is zero. MADHAV blocks the booking and offers available
+
+20
+00:01:08,234 --> 00:01:11,752
+alternatives. It never substitutes a product automatically.
+
+21
+00:01:13,466 --> 00:01:17,717
+Rohan chooses vanilla in a follow-up. The new customer message
+
+22
+00:01:17,717 --> 00:01:19,418
+is fictional demo data.
+
+23
+00:01:20,604 --> 00:01:24,352
+We review the new proposal: one vanilla cake, seven hundred
+
+24
+00:01:24,352 --> 00:01:25,476
+and fifty rupees.
+
+25
+00:01:26,708 --> 00:01:31,028
+Now I approve the vanilla order and its reply. Red
+
+26
+00:01:31,028 --> 00:01:32,324
+Velvet remains unbooked.
+
+27
+00:01:33,494 --> 00:01:36,494
+Meera needs two cupcake boxes tomorrow.
+
+28
+00:01:37,690 --> 00:01:41,008
+The catalog price is four hundred and twenty per box.
+
+29
+00:01:41,008 --> 00:01:43,330
+That's eight hundred and forty in total.
+
+30
+00:01:44,550 --> 00:01:48,198
+I reserve this order and approve the confirmation separately.
+
+31
+00:01:49,379 --> 00:01:52,333
+In Orders, we can see the full eight hundred and
+
+32
+00:01:52,333 --> 00:01:53,219
+forty rupee total.
+
+33
+00:01:54,877 --> 00:01:59,271
+Now I manually record four hundred and twenty rupees received,
+
+34
+00:01:59,271 --> 00:02:00,589
+after independent confirmation.
+
+35
+00:02:01,747 --> 00:02:05,380
+MADHAV shows four hundred and twenty paid, and four hundred
+
+36
+00:02:05,380 --> 00:02:09,012
+and twenty still due. A payment claim never changes the
+
+37
+00:02:09,012 --> 00:02:09,739
+ledger automatically.
+
+38
+00:02:10,910 --> 00:02:16,030
+AMD handles language understanding. Our code enforces prices, stock and
+
+39
+00:02:16,030 --> 00:02:21,150
+owner approval. This is a chat simulation; official WhatsApp integration
+
+40
+00:02:21,150 --> 00:02:23,198
+comes later. That's MADHAV.
+
