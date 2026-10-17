@@ -1,0 +1,158 @@
+[
+  {
+    "case": "configuration",
+    "status": 200,
+    "seconds": 8.35,
+    "body": {
+      "configured": true,
+      "model": "DeepSeek-V4-Flash",
+      "referenceDate": "2026-10-17",
+      "timezone": "Asia/Kolkata"
+    }
+  },
+  {
+    "case": "Hinglish order",
+    "status": 200,
+    "seconds": 11.22,
+    "body": {
+      "proposal": {
+        "intent": "order",
+        "productId": "chocolate",
+        "quantity": 1,
+        "date": "2026-10-18",
+        "language": "hi",
+        "note": "One chocolate cake requested for tomorrow; also asks price.",
+        "missing": []
+      },
+      "model": "DeepSeek-V4-Flash",
+      "referenceDate": "2026-10-17",
+      "usage": {
+        "promptTokens": 841,
+        "completionTokens": 48,
+        "totalTokens": 889
+      }
+    }
+  },
+  {
+    "case": "English quantity",
+    "status": 200,
+    "seconds": 10.74,
+    "body": {
+      "proposal": {
+        "intent": "order",
+        "productId": "cupcakes",
+        "quantity": 2,
+        "date": "2026-10-18",
+        "language": "en",
+        "note": "Two cupcake boxes requested for tomorrow.",
+        "missing": []
+      },
+      "model": "DeepSeek-V4-Flash",
+      "referenceDate": "2026-10-17",
+      "usage": {
+        "promptTokens": 831,
+        "completionTokens": 46,
+        "totalTokens": 877
+      }
+    }
+  },
+  {
+    "case": "Missing details",
+    "status": 200,
+    "seconds": 10.58,
+    "body": {
+      "proposal": {
+        "intent": "order",
+        "productId": "chocolate",
+        "quantity": null,
+        "date": null,
+        "language": "hi",
+        "note": "Quantity and pickup date are unspecified.",
+        "missing": [
+          "quantity",
+          "date"
+        ]
+      },
+      "model": "DeepSeek-V4-Flash",
+      "referenceDate": "2026-10-17",
+      "usage": {
+        "promptTokens": 826,
+        "completionTokens": 43,
+        "totalTokens": 869
+      }
+    }
+  },
+  {
+    "case": "Sold out request",
+    "status": 200,
+    "seconds": 10.81,
+    "body": {
+      "proposal": {
+        "intent": "order",
+        "productId": "redvelvet",
+        "quantity": 1,
+        "date": "2026-10-18",
+        "language": "hi",
+        "note": "One red velvet cake requested for tomorrow; availability asked.",
+        "missing": []
+      },
+      "model": "DeepSeek-V4-Flash",
+      "referenceDate": "2026-10-17",
+      "usage": {
+        "promptTokens": 833,
+        "completionTokens": 49,
+        "totalTokens": 882
+      }
+    }
+  },
+  {
+    "case": "Follow-up correction",
+    "status": 200,
+    "seconds": 10.43,
+    "body": {
+      "proposal": {
+        "intent": "order",
+        "productId": "vanilla",
+        "quantity": 2,
+        "date": "2026-10-18",
+        "language": "en",
+        "note": "Customer changed order to 2 vanilla cakes for tomorrow.",
+        "missing": []
+      },
+      "model": "DeepSeek-V4-Flash",
+      "referenceDate": "2026-10-17",
+      "usage": {
+        "promptTokens": 854,
+        "completionTokens": 48,
+        "totalTokens": 902
+      }
+    }
+  },
+  {
+    "case": "Allergy handoff",
+    "status": 200,
+    "seconds": 9.68,
+    "body": {
+      "proposal": {
+        "intent": "handoff",
+        "productId": null,
+        "quantity": null,
+        "date": null,
+        "language": "en",
+        "note": "Customer asks about peanut-free guarantee for allergic child; requires handoff.",
+        "missing": [
+          "product",
+          "quantity",
+          "date"
+        ]
+      },
+      "model": "DeepSeek-V4-Flash",
+      "referenceDate": "2026-10-17",
+      "usage": {
+        "promptTokens": 836,
+        "completionTokens": 46,
+        "totalTokens": 882
+      }
+    }
+  }
+]

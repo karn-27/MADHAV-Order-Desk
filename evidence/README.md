@@ -1,0 +1,1 @@
+Synthetic live endpoint results captured on 17 October 2026. The configuration request is not an inference case. Six inference cases follow. No credentials are included. These are development observations, not an official hackathon score.
