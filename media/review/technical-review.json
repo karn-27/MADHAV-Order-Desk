@@ -1,0 +1,22 @@
+{
+  "duration": "221.880000",
+  "size": "7923918",
+  "streams": [
+    {
+      "codec_type": "video",
+      "codec_name": "h264",
+      "width": 1920,
+      "height": 1080,
+      "sample_rate": null,
+      "bit_rate": "156078"
+    },
+    {
+      "codec_type": "audio",
+      "codec_name": "aac",
+      "width": null,
+      "height": null,
+      "sample_rate": "44100",
+      "bit_rate": "122860"
+    }
+  ]
+}
