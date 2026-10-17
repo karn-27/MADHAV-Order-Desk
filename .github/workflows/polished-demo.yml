@@ -1,0 +1,65 @@
+name: MADHAV synchronized product showcase
+on:
+  push:
+    paths:
+      - ".github/workflows/polished-demo.yml"
+      - "scripts/record-polished-demo.py"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  record:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - name: Install app
+        run: |
+          corepack enable
+          corepack prepare pnpm@11.25.0 --activate
+          pnpm install --frozen-lockfile
+      - name: Install browser, voice and editing tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -qq -y ffmpeg
+          python -m pip install --break-system-packages playwright edge-tts pydub
+          python -m playwright install --with-deps chromium
+      - name: Validate Python
+        run: python -m py_compile scripts/record-polished-demo.py
+      - name: Launch local application
+        run: |
+          pnpm dev --host 127.0.0.1 > /tmp/madhav.log 2>&1 &
+          for i in $(seq 1 90); do
+            if curl -fsS http://127.0.0.1:5173/ > /dev/null; then exit 0; fi
+            sleep 2
+          done
+          tail -100 /tmp/madhav.log
+          exit 1
+      - name: Record and synchronize
+        run: python -u scripts/record-polished-demo.py
+      - name: Save recording
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: MADHAV-Synced-Showcase-v2
+          path: |
+            demo-output-v2/MADHAV-Order-Desk-Showcase-v2.mp4
+            demo-output-v2/MADHAV-Synced-Captions.srt
+            demo-output-v2/recording-verification.json
+            demo-output-v2/verified-final-frame.png
+          if-no-files-found: warn
+      - name: Publish downloadable demo
+        if: success()
+        run: |
+          mkdir -p media
+          cp demo-output-v2/MADHAV-Order-Desk-Showcase-v2.mp4 media/
+          cp demo-output-v2/MADHAV-Synced-Captions.srt media/
+          cp demo-output-v2/recording-verification.json media/
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add media
+          git commit -m "Publish verified synchronized app showcase"
+          git push
